@@ -1,0 +1,25 @@
+
+; Version LPG-td-1.0
+; Seed 123687541
+; Command line: lpg-td -o zenotravel.pddl -f pfile3 -n 1 
+; Problem pfile3
+; Time 0.00
+; Search time 0.00
+; Parsing time 0.00
+; Mutex time 0.00
+; Quality 27.77
+
+
+Time 0.00
+
+0.0003:   (FLY PLANE1 CITY0 CITY1) [4.8701]
+4.8706:   (BOARD PERSON3 PLANE1 CITY1) [0.3000]
+4.8709:   (REFUEL PLANE1 CITY1) [2.0200]
+6.8911:   (ZOOM PLANE1 CITY1 CITY0) [2.8626]
+9.7540:   (DEBARK PERSON3 PLANE1 CITY0) [0.6000]
+9.7542:   (BOARD PERSON1 PLANE1 CITY0) [0.3000]
+9.7544:   (REFUEL PLANE1 CITY0) [1.2058]
+10.9605:   (ZOOM PLANE1 CITY0 CITY1) [2.8626]
+13.8233:   (DEBARK PERSON1 PLANE1 CITY1) [0.6000]
+
+
