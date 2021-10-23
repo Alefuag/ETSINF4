@@ -1,5 +1,5 @@
 (define (domain multimodal)
-(:requirements :durative-actions :typing :fluents)
+(:requirements :durative-actions :typing :fluents :negative-preconditions)
 (:types combustion electric pedido punto - object)
 
 ;;; LOS PEDIDOS PUEDEN ESTAR EN LOS PUNTOS
@@ -10,26 +10,12 @@
              (zle ?p - punto)
              )
 
+
 (:functions (total-distancia-combustion)
             (dinero-disponible)
+            (dinero-gastado)
             (distance ?p1 - punto ?p2 - punto)
-
             )
-
-
-(:durative-action transportar-combustion
- :parameters (?c - combustion ?p1 ?p2 - punto)
- :duration (= ?duration (/ (distance ?p1 ?p2) 4) )
- :condition (and (at start (at ?c ?p1))
-                 (over all (not (zle ?p1)) )
-                 (over all (not (zle ?p2)) )
-                 (at start (>= (total-distancia-combustion) (distance -p1 -p2) ))
-            )
- :effect (and (at start (not (at ?c ?p1)))
-              (at end (at ?c ?p2))
-              (decrease (total-distancia-combustion) (distance -p1 -p2))
-          )
-)
 
 
 
@@ -43,15 +29,102 @@
           )
 )
 
-(:durative-action ampliar
-:parameters ()
-:duration (= ?duration 1)
-:condition (and (>= (dinero-disponible) 20)
+
+(:durative-action transportar-combustion
+ :parameters (?v - combustion ?p1 ?p2 - punto)
+ :duration (= ?duration (/ (distance ?p1 ?p2) 4) )
+ :condition (and
+                (over all (and
+                    (>= (total-distancia-combustion) (distance ?p1 ?p2) )
+                    (not (zle ?p1))
+                    (not (zle ?p2))
+                ))
+                (at start (and 
+                    (at ?v ?p1)
+                ))
             )
-:effect (and (decrease (dinero-disponible) 20)
-             (increase (total-distancia-combustion) 20)
-        )
+ :effect (and   (at start (not (at ?v ?p1)))
+                (at start (decrease (total-distancia-combustion) (distance ?p1 ?p2)))
+                (at end (at ?v ?p2))
+              
+          )
+)
+
+(:durative-action intercambiar
+    :parameters (?v1 ?v2 - (either combustion electric) ?p - punto ?ped -pedido)
+    :duration (= ?duration 3)
+    :condition (and 
+        (at start (and
+            (in ?ped ?v1)
+        ))
+        (over all (and
+            (intercambio ?p)
+            (at ?v1 ?p)
+            (at ?v2 ?p)
+        ))
+    )
+    :effect (and 
+        (at start (and
+            (not (in ?ped ?v1))
+        ))
+        (at end (and 
+            (in ?ped ?v2)
+        ))
+    )
 )
 
 
+
+
+(:durative-action incrementar
+:parameters ()
+:duration (= ?duration 1)
+:condition (and (at start (>= (dinero-disponible) 20) )
+            )
+:effect (at end (and
+            (decrease (dinero-disponible) 20)
+            (increase (total-distancia-combustion) 20)
+            (increase (dinero-gastado) 20)
+        ))
+)
+
+
+
+(:durative-action recoger
+    :parameters (?v - (either combustion electric) ?ped - pedido ?p - punto)
+    :duration (= ?duration 1)
+    :condition (and 
+        (at start (and
+                    (at ?v ?p)
+                    (at ?ped ?p)
+        ))
+    )
+    :effect (and 
+        (at start (and 
+                    (not (at ?ped ?p) )
+        ))
+        (at end (and
+                    (in ?ped ?v)
+        ))
+    )
+)
+
+(:durative-action entregar
+    :parameters (?v - (either combustion electric) ?ped - pedido ?p - punto)
+    :duration (= ?duration 2)
+    :condition (and 
+        (at start (and
+            (at ?v ?p)
+            (in ?ped ?v)
+        ))
+    )
+    :effect (and 
+        (at start (and
+            (not (in ?ped ?v))
+        ))
+        (at end (and
+            (at ?ped ?p)
+        ))
+    )
+)
 )
