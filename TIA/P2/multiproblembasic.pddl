@@ -1,4 +1,4 @@
-(define (problem zenoproblembasic)
+(define (problem multiproblembasic)
 (:domain multimodal)
 
 (:objects

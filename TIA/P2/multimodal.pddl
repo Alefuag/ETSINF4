@@ -34,13 +34,11 @@
  :parameters (?v - combustion ?p1 ?p2 - punto)
  :duration (= ?duration (/ (distance ?p1 ?p2) 4) )
  :condition (and
-                (over all (and
-                    (>= (total-distancia-combustion) (distance ?p1 ?p2) )
-                    (not (zle ?p1))
-                    (not (zle ?p2))
-                ))
-                (at start (and 
-                    (at ?v ?p1)
+            (at start (and
+                (>= (total-distancia-combustion) (distance ?p1 ?p2))
+                (at ?v ?p1)
+                (not (zle ?p1))
+                (not (zle ?p2))
                 ))
             )
  :effect (and   (at start (not (at ?v ?p1)))
@@ -127,4 +125,5 @@
         ))
     )
 )
+
 )
