@@ -44,14 +44,14 @@
  :effect (and   (at start (not (at ?v ?p1)))
                 (at start (decrease (total-distancia-combustion) (distance ?p1 ?p2)))
                 (at end (at ?v ?p2))
-              
+
           )
 )
 
 (:durative-action intercambiar
     :parameters (?v1 ?v2 - (either combustion electric) ?p - punto ?ped -pedido)
     :duration (= ?duration 3)
-    :condition (and 
+    :condition (and
         (at start (and
             (in ?ped ?v1)
         ))
@@ -61,11 +61,11 @@
             (at ?v2 ?p)
         ))
     )
-    :effect (and 
+    :effect (and
         (at start (and
             (not (in ?ped ?v1))
         ))
-        (at end (and 
+        (at end (and
             (in ?ped ?v2)
         ))
     )
@@ -91,14 +91,13 @@
 (:durative-action recoger
     :parameters (?v - (either combustion electric) ?ped - pedido ?p - punto)
     :duration (= ?duration 1)
-    :condition (and 
-        (at start (and
-                    (at ?v ?p)
-                    (at ?ped ?p)
-        ))
+    :condition (and
+        (over all (at ?v ?p))
+        (at start (at ?ped ?p))
+        )
     )
-    :effect (and 
-        (at start (and 
+    :effect (and
+        (at start (and
                     (not (at ?ped ?p) )
         ))
         (at end (and
@@ -110,13 +109,13 @@
 (:durative-action entregar
     :parameters (?v - (either combustion electric) ?ped - pedido ?p - punto)
     :duration (= ?duration 2)
-    :condition (and 
+    :condition (and
         (at start (and
             (at ?v ?p)
             (in ?ped ?v)
         ))
     )
-    :effect (and 
+    :effect (and
         (at start (and
             (not (in ?ped ?v))
         ))
