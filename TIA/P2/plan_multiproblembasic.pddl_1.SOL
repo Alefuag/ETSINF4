@@ -1,17 +1,35 @@
 
 ; Version LPG-td-1.0
-; Seed 81253594
-; Command line: /cygdrive/c/Users/FranF/Documents/GitHub/ETSINF4/TIA/P2/lpg-td -o .\multimodal.pddl -f .\multiproblembasic.pddl -quality 
+; Seed 77043928
+; Command line: lpg-td -o multimodal.pddl -f multiproblembasic.pddl -n 3 
 ; Problem multiproblembasic.pddl
-; Time 0.02
-; Plan generation time 0.00
+; Time 0.03
 ; Search time 0.00
 ; Parsing time 0.02
 ; Mutex time 0.00
-; Quality 152.00
+; Quality 260.30
 
 
-Time 0.02
+Time 0.03
 
+0.0003:   (RECOGER E1 PED2 PB) [1.0000]
+0.0005:   (TRANSPORTAR-ELECTRIC E2 PB PD) [16.0000]
+16.0007:   (RECOGER E2 PED4 PD) [1.0000]
+17.0010:   (TRANSPORTAR-ELECTRIC E2 PD PB) [16.0000]
+33.0013:   (ENTREGAR E2 PED4 PB) [2.0000]
+35.0015:   (RECOGER E1 PED4 PB) [1.0000]
+36.0018:   (TRANSPORTAR-ELECTRIC E1 PB PE) [20.0000]
+56.0020:   (ENTREGAR E1 PED2 PE) [2.0000]
+56.0023:   (ENTREGAR E1 PED4 PE) [2.0000]
+56.0025:   (RECOGER E1 PED5 PE) [1.0000]
+57.0028:   (TRANSPORTAR-ELECTRIC E1 PE PA) [52.0000]
+109.0030:   (ENTREGAR E1 PED5 PA) [2.0000]
+109.0033:   (RECOGER E1 PED1 PA) [1.0000]
+110.0035:   (TRANSPORTAR-ELECTRIC E1 PA PF) [100.0000]
+210.0038:   (ENTREGAR E1 PED1 PF) [2.0000]
+210.0040:   (RECOGER E1 PED3 PF) [1.0000]
+211.0043:   (TRANSPORTAR-ELECTRIC E1 PF PA) [100.0000]
+311.0045:   (TRANSPORTAR-ELECTRIC E1 PA PD) [10.0000]
+321.0048:   (ENTREGAR E1 PED3 PD) [2.0000]
 
 
