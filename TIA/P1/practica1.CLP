@@ -247,16 +247,3 @@
     (printout t (format nil "Fuerza de frenado mom: %f" ?pf2)crlf )
     (printout t (format nil "Fuerza de aceleracion mom: %f" ?fa2)crlf )
 )
-
-
-
-
-
-
-
-
-
-
-
-
-

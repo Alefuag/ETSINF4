@@ -1,4 +1,4 @@
-(define (domain multimodal)
+(define (domain multimodal3)
 (:requirements :durative-actions :typing :fluents :negative-preconditions)
 (:types combustion electric pedido punto - object)
 
@@ -12,6 +12,7 @@
 
 
 (:functions (total-distancia-combustion)
+            (distancia-recorrida)
             (dinero-disponible)
             (dinero-gastado)
             (distance ?p1 - punto ?p2 - punto)
@@ -34,13 +35,17 @@
  :parameters (?v - combustion ?p1 ?p2 - punto)
  :duration (= ?duration (/ (distance ?p1 ?p2) 4) )
  :condition (and
-            (at start (>= (total-distancia-combustion) (distance ?p1 ?p2)))
-            (at start (at ?v ?p1))
-            (at start (not (zle ?p1)))
-            (at start (not (zle ?p2)))
+            (over all (<= (+ (distancia-recorrida) (distance ?p1 ?p2)) (total-distancia-combustion)))
+            (at start (and
+                
+                (at ?v ?p1)
+                (not (zle ?p1))
+                (not (zle ?p2))
+            ))
+                
             )
  :effect (and   (at start (not (at ?v ?p1)))
-                (at start (decrease (total-distancia-combustion) (distance ?p1 ?p2)))
+                (at start (increase (distancia-recorrida) (distance ?p1 ?p2)))
                 (at end (at ?v ?p2))
 
           )
@@ -77,11 +82,13 @@
 :duration (= ?duration 1)
 :condition (and (at start (>= (dinero-disponible) 20) )
             )
-:effect (at end (and
-            (decrease (dinero-disponible) 20)
+:effect (and
+        (at start (decrease (dinero-disponible) 20) )
+        (at end (and
             (increase (total-distancia-combustion) 20)
             (increase (dinero-gastado) 20)
         ))
+        )
 )
 
 
