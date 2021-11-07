@@ -8,6 +8,7 @@
              (in ?ped - pedido ?v - (either combustion electric))
              (intercambio ?p - punto)
              (zle ?p - punto)
+             (pendiente-firmar ?ped - pedido ?p - punto)
              )
 
 (:functions (total-distancia-combustion)
@@ -99,7 +100,21 @@
     )
     :effect (and
         (at start (not (in ?ped ?v)))
+        (at end (pendiente-firmar ?ped ?p))
+    )
+)
+
+(:durative-action firmar-entrega
+    :parameters (?ped - pedido ?p - punto)
+    :duration (= ?duration 2)
+    :condition (and
+        (at start (pendiente-firmar ?ped ?p))
+    )
+    :effect (and
+        (at end (not (pendiente-firmar ?ped ?p)))
         (at end (at ?ped ?p))
     )
 )
+
+
 )

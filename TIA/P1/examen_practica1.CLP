@@ -1,18 +1,27 @@
 (deftemplate coche
   (slot id (type SYMBOL))
-  (slot distancia (type INTEGER)) 
+  (slot distancia (type INTEGER))
   (slot velocidad (type INTEGER))
   (slot fuerzaFrenadoMax (type FLOAT))
   (slot fuerzaAceleracionMax (type FLOAT))
   (slot fuerzaFrenadoMom (type FLOAT))
-  (slot fuerzaAceleracionMom (type FLOAT))  
+  (slot fuerzaAceleracionMom (type FLOAT))
+  (slot edad (type INTEGER))
+)
+
+(deftemplate inclinacion-difusa
+    -45 45 grados
+    ( (bajada (-20 1) (-5 0))
+      (llano (-10 0) (-5 1) (5 1) (10 0))
+      (subida (5 0) (15 1))
+    )
 )
 
 (deftemplate distancia-difusa ;es una variable difusa
     0 50 metros
     (   (cerca (5 1) (15 0))
         (medio (10 0) (20 1) (30 1) (35 0))
-        (lejos (30 0) (35 1))  
+        (lejos (30 0) (35 1))
     )
 )
 
@@ -20,7 +29,7 @@
     -30 30 kmh
     (   (alejando (-30 1) (0 0))
         (constante (-10 0) (0 1) (15 0))
-        (acercando (0 0) (30 1))  
+        (acercando (0 0) (30 1))
     )
 )
 
@@ -29,7 +38,7 @@
     (   (nula (0 0) (0 1) (0 0))
         (baja (5 1) (20 0))
         (media (10 0) (40 1) (60 1) (70 0))
-        (alta (60 0) (100 1))  
+        (alta (60 0) (100 1))
     )
 )
 
@@ -38,14 +47,14 @@
     (   (nula (0 0) (0 1) (0 0))
         (baja (5 1) (20 0))
         (media (10 0) (40 1) (60 1) (70 0))
-        (alta (60 0) (100 1))   
+        (alta (60 0) (100 1))
     )
 )
 
 (deffunction fuzzify (?fztemplate ?value ?delta)
     (bind ?low (get-u-from ?fztemplate)) ;coge el mínimo del valor del template
     (bind ?hi (get-u-to ?fztemplate)) ;coge el máximo del valor del template
-    
+
     (if (<= ?value ?low)
         then
             (assert-string
@@ -62,6 +71,23 @@
                             ?fztemplate (max ?low (- ?value ?delta))
                             ?value (min ?hi (+ ?value ?delta)) ))
 )))
+
+; Reglas inclinacion difusa
+
+(defrule acercando-bajada
+    (velocidad-difusa acercando)
+    (inclinacion-difusa bajada)
+    =>
+    (assert (fuerza-aceleracion-difusa very alta))
+)
+
+(defrule cerca-subida
+    (distancia-difusa cerca)
+    (inclinacion-difusa subida)
+    =>
+    (assert (presion-freno-difusa baja))
+)
+
 
 
 ; Fuerza aceleración difusa
@@ -137,28 +163,28 @@
     (distancia-difusa cerca)
     (velocidad-difusa alejando)
     =>
-    (assert (presion-freno-difusa nula)) 
+    (assert (presion-freno-difusa nula))
 )
 
 (defrule presion-cerca-constante
     (distancia-difusa cerca)
     (velocidad-difusa constante)
     =>
-    (assert (presion-freno-difusa very baja)) 
+    (assert (presion-freno-difusa very baja))
 )
 
 (defrule presion-cerca-acercando
     (distancia-difusa cerca)
     (velocidad-difusa acercando)
     =>
-    (assert (presion-freno-difusa alta)) 
+    (assert (presion-freno-difusa alta))
 )
 
 (defrule presion-medio-alejando
     (distancia-difusa medio)
     (velocidad-difusa alejando)
     =>
-    (assert (presion-freno-difusa nula)) 
+    (assert (presion-freno-difusa nula))
 )
 
 (defrule presion-medio-constante
@@ -172,14 +198,14 @@
     (distancia-difusa medio)
     (velocidad-difusa acercando)
     =>
-    (assert (presion-freno-difusa more-or-less media)) 
+    (assert (presion-freno-difusa more-or-less media))
 )
 
 (defrule presion-lejos-alejando
     (distancia-difusa lejos)
     (velocidad-difusa alejando)
     =>
-    (assert (presion-freno-difusa nula)) 
+    (assert (presion-freno-difusa nula))
 )
 
 (defrule presion-lejos-constante
@@ -193,7 +219,7 @@
     (distancia-difusa lejos)
     (velocidad-difusa acercando)
     =>
-    (assert (presion-freno-difusa very baja)) 
+    (assert (presion-freno-difusa very baja))
 )
 
 (defrule entrada
@@ -208,7 +234,11 @@
 
     (printout t "Introduzca distancia del vehiculo"crlf)
     (bind ?Rdist (read) )
-    (fuzzify distancia-difusa ?Rdist 0.0 )    
+    (fuzzify distancia-difusa ?Rdist 0.0 )
+
+    (printout t "Introduzca la inclinacion del vehiculo"crlf)
+    (bind ?Rincl (read) )
+    (fuzzify inclinacion-difusa ?Rincl 0.0 )
 
     (assert (coche (id micoche) (distancia ?Rdist) (velocidad ?Rvel)
         (fuerzaFrenadoMax 0.0) (fuerzaAceleracionMax 0.0) (fuerzaFrenadoMom 0.0) (fuerzaAceleracionMom 0.0) )
@@ -216,11 +246,20 @@
 
 )
 
-
-
+;; ?Redad es una variable donde se lee la edad del vehiculo
+(defrule situacion-critica
+    (declare (salience -1))
+    (coche (id ?cocheid) (distancia ?Rdist) (velocidad ?Rvel)
+        (fuerzaFrenadoMax ?ffmax) (fuerzaAceleracionMax ?famax) (fuerzaFrenadoMom ?ffmom) (fuerzaAceleracionMom ?famom) (edad ?Redad) )
+    (presion-freno-difusa ?pfd)
+    (test (> ?Redad 15))
+    (test (> (maximum-defuzzify ?pfd) 0.8))
+    =>
+    (printout "Situacion critica")
+)
 
 (defrule defuzzificar-fren
-    (declare (salience -1) )
+    (declare (salience -5) )
     ?f1 <- (presion-freno-difusa ?pfd)
     =>
     (assert (pfmax (maximum-defuzzify ?pfd) ) )
@@ -228,11 +267,11 @@
 )
 
 (defrule defuzzificar-vel
-    (declare (salience -1) )
+    (declare (salience -5) )
     ?f1 <- (fuerza-aceleracion-difusa ?fad)
     =>
     (assert (famax (maximum-defuzzify ?fad)))
-    (assert (famom (moment-defuzzify ?fad)))   
+    (assert (famom (moment-defuzzify ?fad)))
 )
 
 (defrule final

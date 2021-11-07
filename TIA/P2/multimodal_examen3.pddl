@@ -8,12 +8,14 @@
              (in ?ped - pedido ?v - (either combustion electric))
              (intercambio ?p - punto)
              (zle ?p - punto)
+             (pendiente-firmar ?ped - pedido ?p - punto)
              )
 
 (:functions (total-distancia-combustion)
             (dinero-disponible)
             (dinero-gastado)
             (distance ?p1 - punto ?p2 - punto)
+            (total-transporte-camiones)
             )
 
 (:durative-action transportar-combustion
@@ -28,6 +30,7 @@
  :effect (and   (at start (not (at ?v ?p1)))
                 (at start (decrease (total-distancia-combustion) (distance ?p1 ?p2)))
                 (at end (at ?v ?p2))
+                (at end (increase (total-transporte-camiones) 1))
 
           )
 )
@@ -99,7 +102,21 @@
     )
     :effect (and
         (at start (not (in ?ped ?v)))
+        (at end (pendiente-firmar ?ped ?p))
+    )
+)
+
+(:durative-action firmar-entrega
+    :parameters (?ped - pedido ?p - punto)
+    :duration (= ?duration 2)
+    :condition (and
+        (at start (pendiente-firmar ?ped ?p))
+    )
+    :effect (and
+        (at end (not (pendiente-firmar ?ped ?p)))
         (at end (at ?ped ?p))
     )
 )
+
+
 )

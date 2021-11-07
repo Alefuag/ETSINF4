@@ -1,0 +1,17 @@
+
+; Version LPG-td-1.0
+; Seed 1000
+; Command line: lpg-td -o multimodal_examen2.pddl -f multiproblembasic_examen1.pddl -seed 1000 -quality 
+; Problem multiproblembasic_examen1.pddl
+; Time 0.05
+; Plan generation time 0.00
+; Search time 0.00
+; Parsing time 0.03
+; Mutex time 0.02
+; Quality 48.50
+
+
+Time 0.05
+
+
+
