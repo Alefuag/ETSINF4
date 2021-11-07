@@ -1,0 +1,17 @@
+./gaussian-exp.m train-images-idx3-ubyte.mat.gz train-labels-idx1-ubyte.mat.gz "[1e-8 1e-7 1e-6 1e-5 1e-4 1e-3 1e-2 1e-1 2e-1 5e-1 9e-1 1e1]" 90 10
+Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+
+  alpha dv-err
+------- ------
+1.0e-08 19.550
+1.0e-07 18.933
+1.0e-06 14.083
+1.0e-05  6.317
+1.0e-04  4.267
+1.0e-03  6.383
+1.0e-02 10.000
+1.0e-01 11.967
+2.0e-01 12.200
+5.0e-01 13.550
+9.0e-01 18.683
+1.0e+01 99.667
