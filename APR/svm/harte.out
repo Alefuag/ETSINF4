@@ -1,0 +1,36 @@
+.*.*
+optimization finished, #iter = 2298
+nu = 0.174579
+obj = -108.403744, rho = -0.096434
+nSV = 398, nBSV = 91
+Total nSV = 398
+Variables in the current scope:
+   Attr Name        Size                     Bytes  Class
+   ==== ====        ====                     =====  =====
+        res         1x1                      19224  struct
+Total is 1 element using 19224 bytes
+ans =
+{
+  [1,1] = Parameters
+  [2,1] = nr_class
+  [3,1] = totalSV
+  [4,1] = rho
+  [5,1] = Label
+  [6,1] = sv_indices
+  [7,1] = ProbA
+  [8,1] = ProbB
+  [9,1] = nSV
+  [10,1] = sv_coef
+  [11,1] = SVs
+}
+Parameters: matrix 5 1
+nr_class: scalar val =  2
+totalSV: scalar val =  398
+rho: scalar val = -0.096434
+Label: matrix 2 1
+sv_indices: matrix 398 1
+ProbA: matrix 0 0
+ProbB: matrix 0 0
+nSV: matrix 2 1
+sv_coef: matrix 398 1
+SVs: sparse matrix 398 2
