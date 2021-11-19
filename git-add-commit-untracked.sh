@@ -1,4 +1,4 @@
 #!/bin/bash
-message=${0}
+message=${1}
 git add -A
 git commit -m "$message"
