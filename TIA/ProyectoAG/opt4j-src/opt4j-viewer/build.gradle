@@ -1,7 +1,0 @@
-dependencies {
-	compile project(':opt4j-core')
-}
-
-javadoc {
-   exclude 'ptolemy/**'
-}

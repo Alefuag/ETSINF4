@@ -1,4 +1,4 @@
-    %INCLUDES
+%INCLUDES
 
 include "data.dzn";
 include "alldifferent.mzn";
