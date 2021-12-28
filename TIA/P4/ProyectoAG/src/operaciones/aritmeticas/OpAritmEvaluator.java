@@ -10,26 +10,27 @@ public class OpAritmEvaluator implements Evaluator<ArrayList<MathematicalSymbol>
 
 	public Objectives evaluate(ArrayList<MathematicalSymbol> phenotype) {
 		
-		int resultado = Data.numero[0];
+		int resultado = Data.numeros[0];
 		int numSUM = 0;
 		
 		for(int i = 0; i < phenotype.size(); i++)
 		{
 			switch (phenotype.get(i)) {
 			case PLUS:
-				resultado += Data.numero[i + 1];
+				resultado += Data.numeros[i+1];
+				numSUM++;
 				break;
 			
 			case MINUS:
-				resultado -= Data.numero[i - 1];
+				resultado -= Data.numeros[i+1];
 				break;
 				
 			case MULT:
-				resultado *= Data.numero[i * 1];
+				resultado *= Data.numeros[i+1];
 				break;
 				
 			case DIV:
-				resultado /= Data.numero[i / 1];
+				resultado /= Data.numeros[i+1];
 				break;
 
 			}
